@@ -18,6 +18,9 @@ modules_dir=$kernel_dir/"$zip"/modules
 zip_name="$kernel"-"$version"-"$device".zip
 export KBUILD_BUILD_USER=arnavgosain
 export KBUILD_BUILD_HOST=velvet
+#export CCACHE_DIR="/root/.ccache"
+#export CXX="ccache g++"
+#export CC="ccache gcc"
 
 function clean() {
 rm -rf out2; mkdir out2; export ARCH=arm64; make O=out clean && make O=out mrproper

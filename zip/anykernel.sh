@@ -4,16 +4,16 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=ExampleKernel by osm0sis @ xda-developers
+kernel.string=Velvet Kernel for Redmi Note 4(X)
 do.devicecheck=1
 do.modules=0
 do.cleanup=1
 do.cleanuponabort=0
-device.name1=maguro
-device.name2=toro
-device.name3=toroplus
-device.name4=
-device.name5=
+device.name1=mido
+device.name2=Redmi Note 4
+device.name3=Redmi Note 4X
+supported.sdk1=27
+supported.sdk2=28
 '; } # end properties
 
 # shell variables

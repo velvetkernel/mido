@@ -3,7 +3,7 @@ echo "Welcome to Velvet Kernel Builder!"
 LC_ALL=C date +%Y-%m-%d
 kernel_dir=$PWD
 build=$kernel_dir/out
-export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-uber-4.9/bin/aarch64-linux-android-"
+export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
 kernel="velvet"
 version="001"
 vendor="xiaomi"

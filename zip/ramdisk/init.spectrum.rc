@@ -25,7 +25,7 @@ on property:persist.spectrum.profile=0
     write /sys/module/adreno_idler/parameters/adreno_idler_active 1
     write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
     write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
-    write /sys/class/kgsl/kgsl-3d0/max_gpuclk 650000000
+    write /sys/class/kgsl/kgsl-3d0/max_gpuclk 500000000
     # Storage
     write /sys/block/mmcblk0/queue/scheduler fiops
     # USB Fast Charge
@@ -115,7 +115,7 @@ on property:persist.spectrum.profile=2
     # GPU
     write /sys/class/kgsl/kgsl-3d0/devfreq/governor simple-ondemand
     write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
-    write /sys/class/kgsl/kgsl-3d0/max_gpuclk 320000000
+    write /sys/class/kgsl/kgsl-3d0/max_gpuclk 400000000
     # Storage
     write /sys/block/mmcblk0/queue/scheduler bfq
     # USB Fast Charge

@@ -122,13 +122,6 @@ config IOSCHED_TRIPNDROID
 	default y
 	---help---
 	  The Trip N Droid scheduler
-  
-config IOSCHED_VR
-	tristate "V(R) I/O scheduler"
-	default y
-	---help---
-	  Requests are chosen according to SSTF with a penalty of rev_penalty
-	  for switching head direction.
 
 choice
 	prompt "Default I/O scheduler"
@@ -177,9 +170,6 @@ choice
 	config DEFAULT_TRIPNDROID
 		bool "TRIPNDROID" if IOSCHED_TRIPNDROID=y
 
-	config DEFAULT_VR
-		bool "V(R)" if IOSCHED_VR=y
-
 endchoice
 
 config DEFAULT_IOSCHED
@@ -191,10 +181,7 @@ config DEFAULT_IOSCHED
 	default "fiops" if DEFAULT_FIOPS
 	default "sio" if DEFAULT_SIO
 	default "zen" if DEFAULT_ZEN
-	default "fifo" if DEFAULT_FIFO
-	default "sioplus" if DEFAULT_SIOPLUS
 	default "tripndroid" if DEFAULT_TRIPNDROID
-	default "vr" if DEFAULT_VR
 	default "maple" if DEFAULT_MAPLE
 
 endmenu

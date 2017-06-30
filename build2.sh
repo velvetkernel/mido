@@ -13,11 +13,7 @@ date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
 kerneltype="Image.gz-dtb"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
-if [ $module = "magisk" ]; then
-    modules_dir=$kernel_dir/modules/system/lib/modules
-else
-    modules_dir=$kernel_dir/"$zip"/modules
-fi
+modules_dir=$kernel_dir/"$zip"/modules
 zip_name="$kernel"-"$version"-"$device".zip
 export KBUILD_BUILD_USER=arnavgosain
 export KBUILD_BUILD_HOST=velvet

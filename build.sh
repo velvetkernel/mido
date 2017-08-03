@@ -96,7 +96,13 @@ if [ -f "$zip"/"$kerneltype" ]; then
 	rm "$kerneltype"
 	cd ..
 	rm -rf arch/arm64/boot/"$kerneltype"
-	export outdir="$build"
+        echo "Generating changelog..."
+        git --no-pager log --pretty=oneline --abbrev-commit 5a78b82c579686457ad600ad4bdf3d6abd0311da..HEAD > zip/changelog.txt
+        paste zip/changelog.txt
+        rm zip/changelog.txt
+	export outdir=""$build""
+        export out=""$build""
+        export OUT=""$build""
 	echo "Package complete: "$build"/"$zip_name""
 	exit 0;
 else

@@ -7,14 +7,14 @@ export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bi
 kernel="velvet"
 version="r4.1"
 vendor="xiaomi"
-device="mido-los"
-zip=zip
+device="mido-beta"
+zip=$kernel_dir/zip
 date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
 kerneltype="Image.gz-dtb"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
-#modules_dir=$kernel_dir/"$zip"/system/lib/modules
-modules_dir=$kernel_dir/"$zip"/modules
+#modules_dir=$zip/modules
+modules_dir=$kernel_dir/modules/system/lib/modules/
 zip_name="$kernel"-"$version"-"$device".zip
 export KBUILD_BUILD_USER=arnavgosain
 export KBUILD_BUILD_HOST=velvet
@@ -28,6 +28,8 @@ if [ -d arch/arm64/boot/"$kerneltype" ]; then
 			mkdir out
 			rm -rf "$zip"/modules
 			mkdir "$zip"/modules
+			rm -rf $modules_dir
+			mkdir -p $modules_dir
 			export ARCH=arm64
 			make clean && make mrproper
 			echo "Working directory cleaned...";;
@@ -52,12 +54,12 @@ fi
 echo "Extracting files..."
 if [ -f arch/arm64/boot/"$kerneltype" ]; then
 	cp arch/arm64/boot/"$kerneltype" "$zip"/"$kerneltype"
-#        mkdir -p zip/modules/pronto
-#	cp drivers/staging/prima/wlan.ko zip/modules/pronto/pronto_wlan.ko
-	find . -name '*.ko' -exec cp {} $modules_dir/ \;
-	"$CROSS_COMPILE"strip --strip-unneeded "$zip"/modules/*.ko &> /dev/null
-        mkdir -p zip/modules/pronto/
-        mv zip/modules/wlan.ko zip/modules/pronto/pronto_wlan.ko
+#	find . -name '*.ko' -exec cp {} $modules_dir/ \;
+#	"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
+        find . -name 'wlan.ko' -exec cp {} $modules_dir/ \;
+        "$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
+        mkdir -p $modules_dir/pronto/
+        cp $modules_dir/wlan.ko $modules_dir/pronto/pronto_wlan.ko
 else
 	echo "Nothing has been made..."
 	read -p "Clean working directory..(y/n)? : " achoice
@@ -90,6 +92,9 @@ fi
 
 echo "Zipping..."
 if [ -f "$zip"/"$kerneltype" ]; then
+        cd modules
+        zip -r modules-$zip_name .
+        mv *.zip $build
 	cd "$zip"
 	zip -r ../$zip_name .
 	mv ../$zip_name $build

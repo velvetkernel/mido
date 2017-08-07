@@ -7,14 +7,18 @@ export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bi
 kernel="velvet"
 version="r4.1"
 vendor="xiaomi"
-device="mido-los"
+device="mido-beta"
 zip=zip
 date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
 kerneltype="Image.gz-dtb"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
-#modules_dir=$kernel_dir/"$zip"/system/lib/modules
-modules_dir=$kernel_dir/"$zip"/modules
+if [ $module == "magisk" ];
+then
+    modules_dir=$kernel_dir/modules/system/lib/modules
+else
+    modules_dir=$kernel_dir/"$zip"/modules
+fi
 zip_name="$kernel"-"$version"-"$device".zip
 export KBUILD_BUILD_USER=arnavgosain
 export KBUILD_BUILD_HOST=velvet
@@ -22,6 +26,8 @@ export KBUILD_BUILD_HOST=velvet
 function clean() {
 rm -rf out
 mkdir out
+rm -rf $modules_dir
+mkdir -p $modules_dir
 export ARCH=arm64
 make clean && make mrproper
 }
@@ -30,6 +36,10 @@ function build() {
 make "$config"
 make "$jobcount"
 cp arch/arm64/boot/"$kerneltype" "$zip"/"$kerneltype"
+find . -name 'wlan.ko' -exec cp {} $modules_dir/ \;
+"$CROSS_COMPILE"strip --strip-unneeded $modules_dir/*.ko &> /dev/null
+mkdir -p $modules_dir/pronto/
+cp $modules_dir/wlan.ko $modules_dir/pronto/pronto_wlan.ko
 }
 
 function kzip() {
@@ -50,6 +60,12 @@ echo "$build/$zip_name" >> ${HOME}/velvet/builderbot/velvet.txt
 exit 0;
 }
 
+function modzip() {
+cd modules
+zip -r $build/modules-$zip_name .
+cd $kernel_dir
+}
+
 echo $zip_name
 echo $kernel_dir
 
@@ -57,7 +73,9 @@ if [[ "$1" =~ "cleanbuild" ]];
 then
     clean
     build
+    modzip
     kzip
+    cd $kernel_dir
 else
     if [[ "$1" =~ "reset" ]];
     then

@@ -1,0 +1,6 @@
+id=velvetmodules
+name=Velvet Modules
+version=t3.95
+versionCode=3.95
+author=arn4v
+description=Modules needed for WiFi to work on velvet kernel

@@ -5,7 +5,7 @@ kernel_dir=$PWD
 build=$kernel_dir/out
 export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
 kernel="velvet"
-version="t4.11"
+version="t4.13"
 vendor="xiaomi"
 device="mido-beta"
 zip=zip
@@ -92,4 +92,11 @@ then
     git fetch origin
     git checkout origin/cm-14.1
     git reset --hard
+fi
+
+if [ -z "$1" ]; then
+clean
+build
+modzip
+kzip
 fi

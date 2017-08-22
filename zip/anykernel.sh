@@ -401,9 +401,13 @@ patch_prop() {
 # set permissions for included ramdisk files
 chmod -R 755 $ramdisk
 
-dd if=$block of=/data/velvet-stock_boot.img;
-cp /system/lib/modules/wlan.ko /data/velvet-wlan.ko;
-cp /system/lib/modules/pronto/pronto_wlan.ko /data/velvet-pronto_wlan.ko;
+if [ -f /data/velvet-stock_boot.img ]; then
+    dd if=/data/velvet-stock_boot.img of=$block
+else
+    dd if=$block of=/data/velvet-stock_boot.img;
+    cp /system/lib/modules/wlan.ko /data/velvet-wlan.ko;
+    cp /system/lib/modules/pronto/pronto_wlan.ko /data/velvet-pronto_wlan.ko;
+fi
 ## AnyKernel install
 dump_boot;
 # insert init.spectrum.rc in init.rc

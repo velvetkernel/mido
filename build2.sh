@@ -5,7 +5,7 @@ kernel_dir=$PWD
 build=$kernel_dir/out
 export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
 kernel="velvet"
-version="t4.13"
+version="t4.65"
 vendor="xiaomi"
 device="mido-beta"
 zip=zip
@@ -19,12 +19,7 @@ export KBUILD_BUILD_USER=arnavgosain
 export KBUILD_BUILD_HOST=velvet
 
 function clean() {
-rm -rf out
-mkdir out
-rm -rf $modules_dir
-mkdir -p $modules_dir
-export ARCH=arm64
-make clean && make mrproper
+rm -rf out; mkdir out; rm -rf $modules_dir; mkdir -p $modules_dir; export ARCH=arm64; make clean && make mrproper
 }
 
 function build() {
@@ -36,6 +31,7 @@ find . -name 'wlan.ko' -exec cp {} $modules_dir/ \;
 mkdir -p $modules_dir/pronto/
 cp $modules_dir/wlan.ko $modules_dir/pronto/pronto_wlan.ko
 }
+
 
 function kzip() {
 rm ${HOME}/velvet/builderbot/velvet.txt
@@ -59,6 +55,10 @@ function modzip() {
 cd modules
 zip -r $build/modules-$zip_name .
 cd $kernel_dir
+}
+
+function cleanbuild() {
+clean; build; modzip; kzip
 }
 
 echo $zip_name
@@ -94,9 +94,6 @@ then
     git reset --hard
 fi
 
-if [ -z "$1" ]; then
-clean
-build
-modzip
-kzip
+if [ -z $1]; then
+cleanbuild
 fi

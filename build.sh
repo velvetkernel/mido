@@ -3,7 +3,7 @@ echo "Welcome to Velvet Kernel Builder!"
 LC_ALL=C date +%Y-%m-%d
 kernel_dir=$PWD
 build=$kernel_dir/out
-export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
+export CROSS_COMPILE="/home/adesh/Android/Adesh/kernel/gcc-linaro-6.3.1-2017.05-i686_aarch64-linux-gnu/bin/aarch64-linux-gnu-"
 kernel="velvet"
 version="r5.1"
 vendor="xiaomi"
@@ -16,7 +16,7 @@ jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
 #modules_dir=$kernel_dir/"$zip"/system/lib/modules
 modules_dir=$kernel_dir/"$zip"/modules
 zip_name="$kernel"-"$version"-"$device".zip
-export KBUILD_BUILD_USER=arnavgosain
+export KBUILD_BUILD_USER=adesh15
 export KBUILD_BUILD_HOST=velvet
 
 echo "Checking for build..."

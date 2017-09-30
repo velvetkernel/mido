@@ -23,7 +23,7 @@ on property:persist.spectrum.profile=0
     write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 60000
     write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 652800
     write /sys/devices/system/cpu/cpufreq/interactive/timer_slack 480000
-    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "80 652800:57 1036800:67 1401600:75 1689600:9 1843200:85 1958400:87"
+    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "80 652800:57 1036800:67 1401600:75 1689600:80 1843200:85 1958400:87"
     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 0
     write /sys/devices/system/cpu/cpufreq/interactive/boost 0
     write /sys/devices/system/cpu/cpufreq/interactive/align_windows 1

@@ -1,6 +1,6 @@
 VERSION = 3
 PATCHLEVEL = 18
-SUBLEVEL = 67
+SUBLEVEL = 78
 EXTRAVERSION =
 NAME = Shuffling Zombie Juror
 
@@ -249,7 +249,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 # Default value for CROSS_COMPILE is not to prefix executables
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 ARCH		?= arm64
-CROSS_COMPILE	?= ~/Documents/android-ndk-r13b/toolchains/gcc_linaro_6.3.1_aarch64/bin/aarch64-linux-gnu-
+CROSS_COMPILE	?= /home/adesh/Adesh/kernel/gcc-prebuilts/bin/aarch64-linaro-linux-android-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -628,8 +628,18 @@ else
 KBUILD_CFLAGS	+= -O2 $(call cc-disable-warning,maybe-uninitialized,)
 endif
 
+
+# Kill array bound warnings
+KBUILD_CFLAGS	+= $(call cc-disable-warning,array-bounds,)
+
+# Kill misleading indention errors
+KBUILD_CFLAGS   += -Wno-misleading-indentation
+
 # Tell gcc to never replace conditional load with a non-conditional one
 KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
+
+# Needed to unbreak GCC 7.x and above
+KBUILD_CFLAGS   += $(call cc-option,-fno-store-merging,)
 
 ifdef CONFIG_READABLE_ASM
 # Disable optimizations that make assembler listings hard to read.

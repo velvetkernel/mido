@@ -50,7 +50,7 @@
 #define MAX_RISE_TIME_MS		7
 #define MAX_HOLD_TIME_MS		5
 #define MAX_FALL_TIME_MS		7
-#define MAX_OFF_TIME_MS			5
+#define MAX_OFF_TIME_MS			7
 
 struct aw2013_led {
 	struct i2c_client *client;

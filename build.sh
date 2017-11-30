@@ -1,6 +1,6 @@
 CCACHE=$(command -v ccache)
 
-TOOLCHAIN=/home/adesh/Adesh/kernel/gcc-prebuilts/bin/aarch64-linaro-linux-android-
+TOOLCHAIN=/home/adesh/Adesh/kernel/gcc-linaro-4.9.4-2017.01-i686_aarch64-linux-gnu/bin/aarch64-linux-gnu-
 
 export CROSS_COMPILE="${CCACHE} ${TOOLCHAIN}"
 

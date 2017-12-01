@@ -1,13 +1,10 @@
 #!/bin/bash
+source versioning
 echo "Welcome to Velvet Kernel Builder!"
 LC_ALL=C date +%Y-%m-%d
 kernel_dir=$PWD
 build=$kernel_dir/out
 export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
-kernel="velvet"
-version="r5.5-test"
-vendor="xiaomi"
-device="mido-los"
 zip=zip
 date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig

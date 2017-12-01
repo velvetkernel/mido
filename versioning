@@ -1,0 +1,6 @@
+#!/bin/bash
+version=r6
+kernel="velvet"
+vendor="xiaomi"
+device="mido-los"
+

@@ -23,7 +23,6 @@
 #include <linux/dma-buf.h>
 #include <linux/pm_runtime.h>
 #include <linux/sw_sync.h>
-#include <linux/iommu.h>
 
 #include "mdp3_ctrl.h"
 #include "mdp3.h"
@@ -416,12 +415,6 @@ static ssize_t mdp3_bl_show_event(struct device *dev,
 	return ret;
 }
 
-static ssize_t mdp3_ad_event(struct device *dev,
-		struct device_attribute *attr, char *buf)
-{
-	return 0;
-}
-
 static ssize_t mdp3_hist_show_event(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -529,8 +522,6 @@ static ssize_t mdp3_dyn_pu_store(struct device *dev,
 
 static DEVICE_ATTR(hist_event, S_IRUGO, mdp3_hist_show_event, NULL);
 static DEVICE_ATTR(bl_event, S_IRUGO, mdp3_bl_show_event, NULL);
-static DEVICE_ATTR(ad_bl_event, S_IRUGO, mdp3_ad_event, NULL);
-static DEVICE_ATTR(ad_event, S_IRUGO, mdp3_ad_event, NULL);
 static DEVICE_ATTR(vsync_event, S_IRUGO, mdp3_vsync_show_event, NULL);
 static DEVICE_ATTR(packpattern, S_IRUGO, mdp3_packpattern_show, NULL);
 static DEVICE_ATTR(dyn_pu, S_IRUGO | S_IWUSR | S_IWGRP, mdp3_dyn_pu_show,
@@ -541,8 +532,6 @@ static struct attribute *generic_attrs[] = {
 	&dev_attr_dyn_pu.attr,
 	&dev_attr_hist_event.attr,
 	&dev_attr_bl_event.attr,
-	&dev_attr_ad_bl_event.attr,
-	&dev_attr_ad_event.attr,
 	NULL,
 };
 
@@ -1184,16 +1173,6 @@ int mdp3_ctrl_reset(struct msm_fb_data_type *mfd)
 		mdp3_qos_remapper_setup(panel);
 	}
 
-	/*Map the splash addr for VIDEO mode panel before smmu attach*/
-	if ((mfd->panel.type == MIPI_VIDEO_PANEL) &&
-				(mdp3_session->in_splash_screen)) {
-		rc = mdss_smmu_map(MDSS_IOMMU_DOMAIN_UNSECURE,
-				mdp3_res->splash_mem_addr,
-				mdp3_res->splash_mem_addr,
-				mdp3_res->splash_mem_size,
-				IOMMU_READ | IOMMU_NOEXEC);
-	}
-
 	rc = mdp3_iommu_enable(MDP3_CLIENT_DMA_P);
 	if (rc) {
 		pr_err("fail to attach dma iommu\n");
@@ -1829,15 +1808,12 @@ static int mdp3_histogram_start(struct mdp3_session_data *session,
 	pr_debug("mdp3_histogram_start\n");
 
 	ret = mdp3_validate_start_req(req);
-	if (ret) {
-		mutex_unlock(&session->lock);
+	if (ret)
 		return ret;
-	}
 
 	if (!session->dma->histo_op ||
 		!session->dma->config_histo) {
 		pr_err("mdp3_histogram_start not supported\n");
-		mutex_unlock(&session->lock);
 		return -EINVAL;
 	}
 
@@ -1846,7 +1822,6 @@ static int mdp3_histogram_start(struct mdp3_session_data *session,
 	if (session->histo_status) {
 		pr_info("mdp3_histogram_start already started\n");
 		mutex_unlock(&session->histo_lock);
-		mutex_unlock(&session->lock);
 		return 0;
 	}
 
@@ -2911,7 +2886,6 @@ int mdp3_ctrl_init(struct msm_fb_data_type *mfd)
 		goto init_done;
 	}
 
-	mfd->skip_koff_wait = true;
 	mdp3_session->dma->output_config.out_sel = intf_type;
 	mdp3_session->mfd = mfd;
 	mdp3_session->panel = dev_get_platdata(&mfd->pdev->dev);
@@ -2966,23 +2940,6 @@ int mdp3_ctrl_init(struct msm_fb_data_type *mfd)
 		rc = -ENODEV;
 		goto init_done;
 	}
-
-	mdp3_session->ad_bl_event_sd = sysfs_get_dirent(dev->kobj.sd,
-							"ad_bl_event");
-	if (!mdp3_session->ad_bl_event_sd) {
-		pr_err("ad_bl_event sysfs lookup failed\n");
-		rc = -ENODEV;
-		goto init_done;
-	}
-
-	mdp3_session->ad_event_sd = sysfs_get_dirent(dev->kobj.sd,
-							"ad_event");
-	if (!mdp3_session->ad_event_sd) {
-		pr_err("ad_event sysfs lookup failed\n");
-		rc = -ENODEV;
-		goto init_done;
-	}
-
 
 	rc = mdp3_create_sysfs_link(dev);
 	if (rc)

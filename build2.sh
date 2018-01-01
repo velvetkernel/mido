@@ -1,5 +1,4 @@
 #!/bin/bash
-source versioning
 echo "Welcome to Velvet Kernel Builder!"
 LC_ALL=C date +%Y-%m-%d
 kernel_dir=$PWD

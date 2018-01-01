@@ -4,6 +4,10 @@ echo "Welcome to Velvet Kernel Builder!"
 LC_ALL=C date +%Y-%m-%d
 kernel_dir=$PWD
 build=$kernel_dir/out
+version=r6.4
+kernel="velvet"
+vendor="xiaomi"
+device="mido-nougat-aosp"
 export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
 zip=zip
 date=`date +"%Y%m%d-%H%M"`

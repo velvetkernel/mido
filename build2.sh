@@ -1,9 +1,9 @@
 #!/bin/bash
 echo "Welcome to Velvet Kernel Builder!"
 LC_ALL=C date +%Y-%m-%d
-kernel_dir=$PWD
+kernel_dir=$PWD/
 build=$kernel_dir/out
-version=r6.4
+version=r6.7
 kernel="velvet"
 vendor="xiaomi"
 device="mido-nougat-aosp"

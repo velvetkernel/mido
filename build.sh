@@ -11,7 +11,7 @@ export CROSS_COMPILE="/home/arn4v/velvet/toolchains/aarch64-linux-android-4.9/bi
 zip=zip
 date=`date +"%Y%m%d-%H%M"`
 config=mido_defconfig
-kerneltype="Image.gz-dtb"
+kerneltype="Image.gz"
 jobcount="-j$(grep -c ^processor /proc/cpuinfo)"
 #modules_dir=$kernel_dir/"$zip"/system/lib/modules
 modules_dir=$kernel_dir/"$zip"/modules
@@ -27,7 +27,7 @@ rm -rf out2; mkdir out2; export ARCH=arm64; make O=out clean && make O=out mrpro
 }
 
 function build() {
-make O=out "$config"; make O=out "$jobcount"; cp out/arch/arm64/boot/"$kerneltype" "$zip"/"$kerneltype"
+make O=out "$config"; make O=out "$jobcount"; mkdir "$zip"/kernel; cp out/arch/arm64/boot/"$kerneltype" "$zip"/kernel/"$kerneltype"
 }
 
 function cleanbuild() {
@@ -38,10 +38,10 @@ function kzip() {
 cd $kernel_dir/$zip
 mkdir treble
 mkdir nontreble
-cp $kernel_dir/arch/arm64/boot/dts/qcom/msm8953-qrd-sku3-mido-nontreble.dtb $kernel_dir/zip/nontreble/
-cp $kernel_dir/arch/arm64/boot/dts/qcom/msm8953-qrd-sku3-mido-treble.dtb $kernel_dir/zip/treble/
+cp $kernel_dir/out/arch/arm64/boot/dts/qcom/msm8953-qrd-sku3-mido-nontreble.dtb $kernel_dir/zip/nontreble/
+cp $kernel_dir/out/arch/arm64/boot/dts/qcom/msm8953-qrd-sku3-mido-treble.dtb $kernel_dir/zip/treble/
 zip -r $build/$zip_name .
-rm "$kerneltype"
+rm -rf kernel
 cd ..
 export out2dir=""$build""
 export out2=""$build""
